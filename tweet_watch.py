@@ -11,10 +11,13 @@ import getopt
 LOCALHOST = 'localhost'
 REDIS_PORT = 6379
 ENGLISH = 'en'
-CONSUMER_KEY = '3C2POd9olCQ2eD866DvIAgNx7'
-CONSUMER_SECRET = 'grscajjABDyNsnVtLqAYJgJ9NExxizezhYiMotBkj8C76A3gCU'
-ACCESS_TOKEN_KEY = '1522191547-FfifUKbxagKGHfWtVsswKBTEkNQqJO7UCfApbFo'
-ACCESS_TOKEN_SECRET = 'vuCQ2xGkcJuWRjaNa4CY0L3i861ldmqgq0T85ytv7mwYe'
+
+#Replace your correct keys here before running
+CONSUMER_KEY = 'CCCCC'
+CONSUMER_SECRET = 'HHHHH'
+ACCESS_TOKEN_KEY = 'AAAAA'
+ACCESS_TOKEN_SECRET = 'IIIII'
+
 INCREMENT_COUNTER = 1
 NO_OF_LOCATIONS = 5
 QUEUE = 'tweet_locations_prority_queue'
@@ -73,11 +76,11 @@ def main(argv):
    try:
       opts, args = getopt.getopt(argv,"hf:s:",["f=","s="])
    except getopt.GetoptError:
-      print 'test.py -f <location1> -s <location2>'
+      print 'tweet_watch.py -f <location1> -s <location2>'
       sys.exit(2)
    for opt, arg in opts:
       if opt == '-h':
-         print 'test.py -f <location1> -s <location2>'
+         print 'tweet_watch.py -f <location1> -s <location2>'
          sys.exit()
       elif opt in ("-f", "--f"):
          location1 = arg
