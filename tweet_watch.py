@@ -18,9 +18,11 @@ CONSUMER_SECRET = 'HHHHH'
 ACCESS_TOKEN_KEY = 'AAAAA'
 ACCESS_TOKEN_SECRET = 'IIIII'
 
-INCREMENT_COUNTER = 1
+INCREMENT_COUNTER = 1.0
 NO_OF_LOCATIONS = 5
-SORTED_SET = 'tweet_locations_sorted_set'
+NO_OF_HASHTAGS = 5
+LOCATIONS_SORTED_SET = 'tweet_locations_sorted_set'
+HASHTAGS_SORTED_SET = 'tweet_hashtags_sorted_set'
 
 #initialize redis
 def initialize_redis():
@@ -61,14 +63,27 @@ def process(location1, location2):
     for line in api.GetStreamFilter(locations = coordinates, languages = languages):
         if line is not None:
             print "Tweet : " + line["text"]
+            
             if line["user"] is not None:
         	if line["user"]["name"] is not None:
 	            print "User Name : " + line["user"]["name"]     
                 if line["user"]["location"] is not None:
                     location = line["user"]["location"]
                     print "Location : " + location
-                    r_conn.zincrby(SORTED_SET, location, float(INCREMENT_COUNTER))
-                print r_conn.zrevrange(SORTED_SET, 0, NO_OF_LOCATIONS - 1)
+                    r_conn.zincrby(LOCATIONS_SORTED_SET, location, INCREMENT_COUNTER)
+            
+            print str(NO_OF_LOCATIONS) + " locations with most tweets in the area are : "
+            print r_conn.zrevrange(LOCATIONS_SORTED_SET, 0, NO_OF_LOCATIONS - 1)
+            
+            if line["entities"] is not None and line["entities"]["hashtags"] is not None:
+                hashtags = line["entities"]["hashtags"]
+                if hashtags is not None:
+                    for hashtag in hashtags:
+                        print "Hashtag - " + hashtag["text"]
+                        r_conn.zincrby(HASHTAGS_SORTED_SET, hashtag["text"], INCREMENT_COUNTER)
+            
+            print str(NO_OF_HASHTAGS) + " Most used hashtags in the area are : "
+            print r_conn.zrevrange(HASHTAGS_SORTED_SET, 0, NO_OF_HASHTAGS - 1)
 
 def main(argv):
    location1 = ''
