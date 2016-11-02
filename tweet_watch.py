@@ -20,7 +20,7 @@ ACCESS_TOKEN_SECRET = 'IIIII'
 
 INCREMENT_COUNTER = 1
 NO_OF_LOCATIONS = 5
-QUEUE = 'tweet_locations_prority_queue'
+SORTED_SET = 'tweet_locations_sorted_set'
 
 #initialize redis
 def initialize_redis():
@@ -67,8 +67,8 @@ def process(location1, location2):
                 if line["user"]["location"] is not None:
                     location = line["user"]["location"]
                     print "Location : " + location
-                    r_conn.zincrby(QUEUE, location, float(INCREMENT_COUNTER))
-                print r_conn.zrevrange(QUEUE, 0, NO_OF_LOCATIONS - 1)
+                    r_conn.zincrby(SORTED_SET, location, float(INCREMENT_COUNTER))
+                print r_conn.zrevrange(SORTED_SET, 0, NO_OF_LOCATIONS - 1)
 
 def main(argv):
    location1 = ''
